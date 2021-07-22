@@ -9,9 +9,12 @@ class Dog {
     );
     this.titleElement = document.querySelector(".tiles");
     this.spinnerElement = document.querySelector(".spinner");
+    this.activeDogElement = document.querySelector(".container__active-dog");
 
     this.init();
   }
+  activeDog = null;
+  status = null;
 
   showSpinner() {
     this.spinnerElement.classList.add("spinner--visible");
@@ -25,7 +28,7 @@ class Dog {
     return fetch(`${this.apiUrl}/breeds/list/all`)
       .then((resp) => resp.json())
       .then((data) => {
-        return data.message;
+        return data;
       });
   }
 
@@ -34,15 +37,34 @@ class Dog {
     return fetch(`${this.apiUrl}/breeds/image/random`)
       .then((resp) => resp.json())
       .then((data) => {
-        return data.message;
+        this.status = data.status;
+        return data;
       });
+  }
+
+  changeImageOnClick() {
+    if (this.activeDog === null) {
+      return this.getRandomImage().then(({ message }) => {
+        this.showImageWhenReady(message);
+        this.hideSpinner();
+      });
+    }
+    this.getRandomImageByBreed(this.activeDog).then(({ message }) => {
+      this.showImageWhenReady(message);
+      this.hideSpinner();
+    });
+  }
+
+  getNewRandomImage() {
+    this.imgElement.addEventListener("click", () => this.changeImageOnClick());
   }
 
   getRandomImageByBreed(breed) {
     return fetch(`${this.apiUrl}/breed/${breed}/images/random`)
       .then((resp) => resp.json())
       .then((data) => {
-        return data.message;
+        this.status = data.status;
+        return data;
       });
   }
 
@@ -52,12 +74,12 @@ class Dog {
   }
 
   showAllBreeds() {
-    this.getAllDogs().then((breeds) => {
-      for (const breed in breeds) {
-        if (breeds[breed].length === 0) {
+    this.getAllDogs().then(({ message }) => {
+      for (const breed in message) {
+        if (message[breed].length === 0) {
           this.addBreed(breed);
         } else {
-          for (const subBreed of breeds[breed]) {
+          for (const subBreed of message[breed]) {
             this.addBreed(breed, subBreed);
           }
         }
@@ -84,11 +106,18 @@ class Dog {
     titleContent.classList.add("tiles__tile-content");
 
     titleContent.innerText = name;
-    titleContent.addEventListener("click", () => {
+    titleContent.setAttribute("data-value", name);
+    titleContent.addEventListener("click", (e) => {
       window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      this.activeDog = e.target.getAttribute("data-value");
+      this.activeDogElement.innerHTML = `<p>Actual selecter dog: ${this.activeDog
+        .toUpperCase()
+        .bold()}. Click on image to load new image</p>`;
+
       this.showSpinner();
-      this.getRandomImageByBreed(type).then((src) => {
-        this.showImageWhenReady(src);
+
+      this.getRandomImageByBreed(type).then(({ message }) => {
+        this.showImageWhenReady(message);
         this.hideSpinner();
       });
     });
@@ -99,10 +128,11 @@ class Dog {
 
   init() {
     this.showSpinner();
-    this.getRandomImage().then((src) => {
-      this.showImageWhenReady(src);
+    this.getRandomImage().then(({ message }) => {
+      this.showImageWhenReady(message);
       this.hideSpinner();
     });
+    this.getNewRandomImage();
 
     this.showAllBreeds();
   }
