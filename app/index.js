@@ -8,6 +8,7 @@ class Dog {
       ".featured-dog__background"
     );
     this.titleElement = document.querySelector(".tiles");
+    this.selectElement = document.querySelector("select");
     this.spinnerElement = document.querySelector(".spinner");
     this.activeDogElement = document.querySelector(".container__active-dog");
 
@@ -99,31 +100,31 @@ class Dog {
       type = `${breed}/${subbreed}`;
     }
 
-    const title = document.createElement("div");
-    title.classList.add("tiles__tile");
+    const option = document.createElement("option");
+    option.innerText = name;
+    option.setAttribute("value", type);
+    this.selectElement.appendChild(option);
+  }
 
-    const titleContent = document.createElement("div");
-    titleContent.classList.add("tiles__tile-content");
-
-    titleContent.innerText = name;
-    titleContent.setAttribute("data-value", name);
-    titleContent.addEventListener("click", (e) => {
-      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-      this.activeDog = e.target.getAttribute("data-value");
+  addEventListenerToSelectElement() {
+    this.selectElement.addEventListener("change", (e) => {
+      this.activeDog = e.target.value;
       this.activeDogElement.innerHTML = `<p>Actual selecter dog: ${this.activeDog
+        .replace("/", " ")
         .toUpperCase()
         .bold()}. Click on image to load new image</p>`;
 
       this.showSpinner();
 
-      this.getRandomImageByBreed(type).then(({ message }) => {
-        this.showImageWhenReady(message);
-        this.hideSpinner();
+      this.getRandomImageByBreed(this.activeDog).then(({ message }) => {
+        if (this.status !== "error") {
+          this.showImageWhenReady(message);
+          this.hideSpinner();
+        } else {
+          this.activeDogElement.innerHTML = `<p>Something went wrong - try to select another breed</p>`;
+        }
       });
     });
-
-    title.appendChild(titleContent);
-    this.titleElement.appendChild(title);
   }
 
   init() {
@@ -135,6 +136,7 @@ class Dog {
     this.getNewRandomImage();
 
     this.showAllBreeds();
+    this.addEventListenerToSelectElement();
   }
 }
 
