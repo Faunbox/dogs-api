@@ -45,14 +45,22 @@ class Dog {
 
   changeImageOnClick() {
     if (this.activeDog === null) {
-      return this.getRandomImage().then(({ message }) => {
-        this.showImageWhenReady(message);
-        this.hideSpinner();
-      });
+      if (this.status !== "error") {
+        return this.getRandomImage().then(({ message }) => {
+          this.showImageWhenReady(message);
+          this.hideSpinner();
+        });
+      } else {
+        this.activeDogElement.innerHTML = `<p>Something went wrong - try to select another breed</p>`;
+      }
     }
     this.getRandomImageByBreed(this.activeDog).then(({ message }) => {
-      this.showImageWhenReady(message);
-      this.hideSpinner();
+      if (this.status !== "error") {
+        this.showImageWhenReady(message);
+        this.hideSpinner();
+      } else {
+        this.activeDogElement.innerHTML = `<p>Something went wrong - try to select another breed</p>`;
+      }
     });
   }
 
