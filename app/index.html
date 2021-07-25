@@ -13,16 +13,25 @@
 
     <title>Cute dogs api</title>
   </head>
-  <body>
+  <body class="overflow-x-hidden">
     <main class="app">
-      <header>
-        <div class="container">
-          <h1>Cute dogs</h1>
-          <div class="container container__active-dog"></div>
-        </div>
+      <header class="text-center">
+        <section>
+          <h2 class="m-3">Select breed to view an image</h2>
+          <label class="m-3"
+            >Choose a breed
+            <select
+              class="form-select form-select-sm w-auto mb-3"
+              name="select"
+            >
+              <option value="">--Choose a breed--</option>
+            </select>
+          </label>
+        </section>
+        <div class="m-3 container__active-dog"></div>
       </header>
-      <section>
-        <div class="container container--flex">
+      <section class="d-flex justify-content-center">
+        <div class="container m-0 container--flex">
           <div class="featured-dog">
             <div class="featured-dog__wrapper">
               <div class="featured-dog__background"></div>
@@ -30,22 +39,10 @@
                 <div class="spinner__content"></div>
               </div>
               <div class="featured-dog__image">
-                <img src="" alt="" />
+                <img class="img-fluid" src="" alt="" />
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      <section>
-        <div class="container">
-          <h2>All cute dogs</h2>
-          <label
-            >Choose a breed
-            <select name="select">
-              <option value="">--Choose a breed--</option>
-            </select>
-          </label>
-          <div class="tiles"></div>
         </div>
       </section>
     </main>

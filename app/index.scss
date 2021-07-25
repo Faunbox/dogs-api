@@ -1,8 +1,7 @@
+@import "~bootstrap/scss/bootstrap";
 @import "typography";
-@import "base"; 
 @import "featured-dog";
-@import "tiles";
-@import 'spinner';
+@import "spinner";
 
 * {
   margin: 0;
@@ -11,5 +10,5 @@
 }
 
 body {
-  background-color: #733;
+  background-color: #111;
 }

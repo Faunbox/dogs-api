@@ -7,7 +7,6 @@ class Dog {
     this.backgroundElement = document.querySelector(
       ".featured-dog__background"
     );
-    this.titleElement = document.querySelector(".tiles");
     this.selectElement = document.querySelector("select");
     this.spinnerElement = document.querySelector(".spinner");
     this.activeDogElement = document.querySelector(".container__active-dog");
