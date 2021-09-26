@@ -1,7 +1,7 @@
 # Dog app from dog-api
 
 ## General info
-App created in OOP JS. 
+App created with JavaScript class
 **[Api used](https://dog.ceo/dog-api/)**
 
 
